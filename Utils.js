@@ -409,6 +409,22 @@ export const diffBetweenDatesNegativeIfLess = (first, second) => {
 }
 
 /**
+ * Converted duration to format hh:mm:ss
+ * @param {*} number Duration number
+ */
+
+export function timeFormat(number) {
+    const duration = Math.floor(number);
+    const h = Math.floor(duration / 3600);
+    const m = Math.floor((duration - h * 3600) / 60);
+    const s = duration % 60;
+    const H = h === 0 ? '' : `${h}:`;
+    const M = m < 10 ? `0${m}:` : `${m}:`;
+    const S = s < 10 ? `0${s}` : `${s}`;
+    return H + M + S;
+}
+
+/**
  * Return hours only : hh:mm.
  * @param {*} date Date to convert
  */
@@ -653,6 +669,21 @@ export const keepUniqueObjectsOnlyBasedOnValue = (array, props) => {
 }
 
 /**
+ * Sort array by alphabetical order
+ * @param {*} array Array to sort
+ * @param {*} property Property to sort from
+ */
+
+export const sortByAlphabetical = (array, property) => {
+    array.sort((a, b) => {
+        if (a[property].toLowerCase() < b[property].toLowerCase()) { return -1; }
+        if (a[property].toLowerCase() > b[property].toLowerCase()) { return 1; }
+        return 0;
+    })
+    return array
+}
+
+/**
  * Return a random item from array
  * @param {*} array Array to choose in
  */
@@ -780,6 +811,41 @@ export const groupBy = (array, parameter) => {
 }
 
 /**
+ * Group array in alphabetical order based on mentioned parameter. Return an array with nested arrays.
+ * @param {*} array Original array
+ * @param {*} parameter Parameter to group by
+ */
+
+export const groupeByAlphabeticalOrder = (array, parameter) => {
+    const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    let sortedArr = {}
+
+    // Store all parameters beginning with the same letter in the same array
+    alphabet.map((letter, i) => {
+        return array.reduce((a, s) => sortedArr[letter] = s[parameter].toLowerCase().startsWith(letter.toLowerCase()) ? [...a, s] : a, []);
+    })
+
+    // Store all parameters beginning with a number in the same array
+    sortedArr['#'] = array.reduce((a, s) => /^\d/.test(s[parameter]) ? [...a, s] : a, []);
+
+    // Store all parameters beginning with a special chars in the same array
+    sortedArr['/'] = array.reduce((a, s) => !/^[A-Za-z0-9]/.test(s[parameter]) ? [...a, s] : a, []);
+
+    return sortedArr
+}
+
+/**
+ * Check if a string is an HTML element (<> ... </>)
+ * @param {*} string String to check
+ */
+
+export const checkIfIsHTML = (string) => {
+    let regexp = new RegExp(/<(?=.*? .*?\/ ?>|br|hr|input|!--|wbr)[a-z]+.*?>|<([a-z]+).*?<\/\1>/i)
+    if (regexp.test(string)) return true
+    else return false
+}
+
+/**
  * Remove HTML markers (</>)
  * @param {*} html HTML to remove markers from
  */
@@ -875,6 +941,16 @@ export const isFile = (file) => {
         '.msc', '.msix', '.msixbundle', '.msp', '.mst', '.nsh', '.pif', '.ps1', '.scr',
         '.sct', '.wsc', '.shb', '.sys', '.vb', '.vbe', '.vbs', '.vxd', '.wsf', '.wsh', '.tar'
     ]
+    return !types.some(el => file.name.endsWith(el))
+}
+
+/**
+ * Check if file is an audio file
+ * @param {*} file File to check
+ */
+
+export const isAudioFile = (file) => {
+    const types = ['.wav', '.ogg', '.mp3', '.flac', '.aiff', '.wma', '.m4a']
     return !types.some(el => file.name.endsWith(el))
 }
 
