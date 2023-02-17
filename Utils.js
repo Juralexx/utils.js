@@ -547,6 +547,16 @@ export const timeBetween = (array, days) => {
 }
 
 /**
+ * Convert an object into array
+ * @param {*} object Object to convert
+ */
+
+export const convertObjToArr = (object) => {
+    let array = Object.entries(object).map(([key, value]) => ({ key, ...value }))
+    return array
+}
+
+/**
  * Add an item to an array
  * @param {*} array Array to add item in
  * @param {*} item Item to add
@@ -1181,6 +1191,20 @@ export const download = async (file) => {
         })
 }
 
+/**
+ * Add `highlight` class to strings partis matching the mentioned query
+ * @param {*} query Query to match
+ * @param {*} classname Class name of the elements to highlight
+ */
+
+export const highlightSearchResults = (query, classname) => {
+    let results = document.getElementsByClassName(classname);
+    let regex = new RegExp(query, 'i');
+
+    for (let i = 0; i < results.length; i++) {
+        results[i].innerHTML = results[i].innerText.replace(regex, (match) => `<span class="hightlight">${match}</span>`);
+    }
+}
 
 
 let characterMap = {
