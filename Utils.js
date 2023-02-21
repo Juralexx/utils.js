@@ -1,4 +1,5 @@
 import axios from "axios";
+// eslint-disable-next-line react-hooks/exhaustive-deps
 
 /**
  * Check if were at the root of the site
@@ -1018,6 +1019,16 @@ export const isEmbeddable = (file) => {
 }
 
 /**
+ * Add 'active' class if condition matches
+ * @param {*} state Condition required
+ */
+
+export const addActive = (state) => {
+    if (state) return 'active'
+    else return 'unactive'
+}
+
+/**
  * Add choosen class if condition matches
  * @param {*} state Condition required
  * @param {*} classe Class to add
@@ -1027,6 +1038,22 @@ export const addClass = (state, classe) => {
     if (state) return classe
     else return 'un' + classe
 }
+
+/**
+ * Add choosen class for each direct childs of the specified component
+ * @param {*} element Parent element
+ * @param {*} classname Class to add
+ */
+
+export const addClassList = (element, classname) => {
+    Object.values(element.children)
+        .forEach(el => {
+            el.classList.add(classname);
+            if (el.children.length > 0) {
+                addClassList(el)
+            };
+        });
+};
 
 /**
  * Reduce string between 0 and choosen length.
@@ -1192,7 +1219,7 @@ export const download = async (file) => {
 }
 
 /**
- * Add `highlight` class to strings partis matching the mentioned query
+ * Add `highlight` class to strings parts matching the mentioned query
  * @param {*} query Query to match
  * @param {*} classname Class name of the elements to highlight
  */
